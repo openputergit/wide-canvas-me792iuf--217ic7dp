@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar {
+            height: calc(100vh - 4rem);
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        [lang="hi"] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">HR Portal</h1>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleLanguage()" class="px-3 py-1 rounded bg-blue-700 hover:bg-blue-800">
+                    <span class="lang-en">हिंदी</span>
+                    <span class="lang-hi">English</span>
+                </button>
+                <button class="px-3 py-1 rounded bg-blue-700 hover:bg-blue-800">
+                    <i class="bi bi-person-circle"></i> Profile
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 p-4 shadow-lg">
+            <div class="space-y-4">
+                <a href="#dashboard" class="block p-2 rounded hover:bg-gray-100 active">
+                    <i class="bi bi-speedometer2 mr-2"></i> 
+                    <span class="lang-en">Dashboard</span>
+                    <span lang="hi">डैशबोर्ड</span>
+                </a>
+                <a href="#" onclick="showLeaveForm()" class="block p-2 rounded hover:bg-gray-100">
+                    <i class="bi bi-calendar-check mr-2"></i> 
+                    <span class="lang-en">Apply Leave</span>
+                    <span lang="hi">छुट्टी के लिए आवेदन</span>
+                </a>
+                <a href="#" class="block p-2 rounded hover:bg-gray-100">
+                    <i class="bi bi-file-text mr-2"></i> 
+                    <span class="lang-en">Payslips</span>
+                    <span lang="hi">वेतन पर्ची</span>
+                </a>
+                <a href="#" class="block p-2 rounded hover:bg-gray-100">
+                    <i class="bi bi-book mr-2"></i> 
+                    <span class="lang-en">Policies</span>
+                    <span lang="hi">नीतियां</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <span class="lang-en">Leave Balance</span>
+                        <span lang="hi">छुट्टी शेष</span>
+                    </h3>
+                    <div class="text-3xl font-bold text-blue-600">15</div>
+                    <p class="text-gray-600">
+                        <span class="lang-en">Days remaining</span>
+                        <span lang="hi">दिन शेष</span>
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <span class="lang-en">Recent Payslip</span>
+                        <span lang="hi">हाल की वेतन पर्ची</span>
+                    </h3>
+                    <p class="text-gray-600">November 2023</p>
+                    <button class="mt-4 text-blue-600 hover:underline">
+                        <i class="bi bi-download mr-1"></i> 
+                        <span class="lang-en">Download</span>
+                        <span lang="hi">डाउनलोड</span>
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <span class="lang-en">Quick Actions</span>
+                        <span lang="hi">त्वरित कार्य</span>
+                    </h3>
+                    <div class="space-y-2">
+                        <button class="w-full text-left p-2 hover:bg-gray-100 rounded">
+                            <i class="bi bi-file-earmark-text mr-2"></i> 
+                            <span class="lang-en">Request Document</span>
+                            <span lang="hi">दस्तावेज़ का अनुरोध</span>
+                        </button>
+                        <button class="w-full text-left p-2 hover:bg-gray-100 rounded">
+                            <i class="bi bi-chat-dots mr-2"></i> 
+                            <span class="lang-en">Contact HR</span>
+                            <span lang="hi">HR से संपर्क करें</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leave Application Modal -->
+    <div id="leaveModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
+            <h2 class="text-xl font-semibold mb-4">
+                <span class="lang-en">Apply for Leave</span>
+                <span lang="hi">छुट्टी के लिए आवेदन</span>
+            </h2>
+            <form id="leaveForm" onsubmit="submitLeave(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            <span class="lang-en">Start Date</span>
+                            <span lang="hi">आरंभ तिथि</span>
+                        </label>
+                        <input type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            <span class="lang-en">End Date</span>
+                            <span lang="hi">समाप्ति तिथि</span>
+                        </label>
+                        <input type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            <span class="lang-en">Reason</span>
+                            <span lang="hi">कारण</span>
+                        </label>
+                        <textarea required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" rows="3"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="hideLeaveForm()" class="px-4 py-2 border rounded-md hover:bg-gray-100">
+                            <span class="lang-en">Cancel</span>
+                            <span lang="hi">रद्द करें</span>
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            <span class="lang-en">Submit</span>
+                            <span lang="hi">जमा करें</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.querySelectorAll('[lang="hi"]').forEach(el => {
+                el.style.display = el.style.display === 'none' ? 'inline' : 'none';
+            });
+            document.querySelectorAll('.lang-en').forEach(el => {
+                el.style.display = el.style.display === 'none' ? 'inline' : 'none';
+            });
+        }
+
+        function showLeaveForm() {
+            document.getElementById('leaveModal').style.display = 'flex';
+        }
+
+        function hideLeaveForm() {
+            document.getElementById('leaveModal').style.display = 'none';
+        }
+
+        function submitLeave(event) {
+            event.preventDefault();
+            // Simulate API call
+            setTimeout(() => {
+                alert('Leave application submitted successfully!');
+                hideLeaveForm();
+            }, 1000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('leaveModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('leaveModal')) {
+                hideLeaveForm();
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
